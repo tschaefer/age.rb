@@ -1,0 +1,50 @@
+---
+name: CI
+
+on:   # yamllint disable-line rule:truthy
+  pull_request:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  ci-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['3.2', '3.3', '3.4', '4.0']
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.25'
+      - name: Install golangci-lint
+        uses: golangci/golangci-lint-action@v9
+        with:
+          version: latest
+          install-only: true
+      - name: Check Go code quality
+        run: |
+          cd ext && \
+            go vet ./... && \
+            go fmt ./... && \
+            golangci-lint run ./... && \
+            cd ..
+      - name: Build native extensions
+        run: |
+          cd ext && \
+            go build -o ../age.so -buildmode=c-shared age.go && \
+            cd ..
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+      - name: Run rubocop
+        run: bundle exec rake rubocop
+      - name: Run tests
+        run: bundle exec rake rspec

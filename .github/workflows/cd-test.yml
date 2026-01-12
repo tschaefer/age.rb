@@ -1,0 +1,30 @@
+---
+name: CD
+
+on:   # yamllint disable-line rule:truthy
+  push:
+    tags:
+      - '*'
+
+permissions:
+  contents: read
+
+jobs:
+  cd-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update && \
+            sudo apt-get install --no-install-recommends --assume-yes \
+              build-essential ruby ruby-dev ruby-bundler golang-go
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Build and install gem
+        run: |
+          sudo bundle install && \
+            sudo rake install
+      - name: Verify gem installation
+        run: |
+          gem which age && \
+            ruby -e "require 'age'; puts Age::VERSION; puts Age.generate_keypair"
