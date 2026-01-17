@@ -8,6 +8,11 @@
 
 # age.rb: Ruby bindings for age
 
+[![Gem Version](https://badge.fury.io/rb/age.rb.svg)](https://badge.fury.io/rb/age.rb)
+[![Ruby Reference](https://img.shields.io/badge/ruby-reference-orange)](https://age.rb.tschaefer.org)
+[![Contributors](https://img.shields.io/github/contributors/tschaefer/age.rb)](https://github.com/tschaefer/age.rb/graphs/contributors)
+[![License](https://img.shields.io/github/license/tschaefer/age.rb)](./LICENSE)
+
 Ruby bindings for [age](https://github.com/FiloSottile/age) using a CGO shared
 library with FFI bindings.
 
