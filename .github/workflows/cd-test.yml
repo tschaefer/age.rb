@@ -19,7 +19,7 @@ jobs:
             sudo apt-get install --no-install-recommends --assume-yes \
               build-essential ruby ruby-dev ruby-bundler golang-go
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Build and install gem
         run: |
           sudo bundle install && \
